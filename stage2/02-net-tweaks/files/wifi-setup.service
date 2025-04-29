@@ -1,0 +1,12 @@
+[Unit]
+Description=One-time WiFi config installer
+After=network.target
+ConditionPathExists=/boot/wpa_supplicant.conf
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/wifi-setup.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
