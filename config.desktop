@@ -9,6 +9,6 @@ TIMEZONE_DEFAULT=Europe/Helsinki
 ENABLE_SSH=1
 DEPLOY_COMPRESSION=zip
 LOCALE_DEFAULT=en_US.UTF-8
-STAGE_LIST="stage0 stage1 stage2 stage3 stage4 stage5"
+STAGE_LIST="stage0 stage1 stage2 stage3 stage4"
 PI_GEN_REPO=https://github.com/lisoant/pi-gen-rtkbase
 arm_64bit=1

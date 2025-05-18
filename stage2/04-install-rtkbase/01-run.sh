@@ -1,18 +1,17 @@
-#!/bin/bash
-set -e
+#!/bin/bash -e
 
-# Siirry väliaikaiseen hakemistoon
-cd /tmp
+# Kopioi skriptit oikeisiin paikkoihin
+install -m 644 files/first_run.sh ${ROOTFS_DIR}/home/${FIRST_USER_NAME}/
+install -m 644 files/firstboot.service ${ROOTFS_DIR}/lib/systemd/system/
+install -m 644 files/firstboot.sh ${ROOTFS_DIR}/boot/
 
-# Lataa RTKBase asennusskripti
-wget https://raw.githubusercontent.com/Stefal/rtkbase/master/tools/install.sh -O install.sh
-chmod +x install.sh
-
-# Pieni korjaus install.sh tiedostoon
-sed -i 's/df \"$HOME\"/df \//g' install.sh
-
-# Suorita virallinen täydellinen järjestelmätason asennus
-sudo ./install.sh --all release
-
-# Siivotaan väliaikaiset tiedostot
-rm -f install.sh
+# Suorita käyttäjäkohtainen asennus chrootissa
+on_chroot << EOF
+cd /etc/systemd/system/multi-user.target.wants && ln -s /lib/systemd/system/firstboot.service
+cd /home/${FIRST_USER_NAME}
+find ./ -type f -iname "*.sh" -exec chmod +x {} \;
+./first_run.sh
+rm first_run.sh
+rm install.sh
+chmod +x /boot/firstboot.sh
+EOF
